@@ -19,7 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let _ = (scene as? UIWindowScene) else { return }
         
         let networkServiceImplementation = NetworkServiceImplementation()
-        let viewController = ResultsViewController(networkService: networkServiceImplementation)
+        let pokemonServiceImplementation = PokemonServiceImplementation(networkServiceProtocol: networkServiceImplementation)
+        let viewController = ResultsViewController(pokemonService: pokemonServiceImplementation)
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
     }

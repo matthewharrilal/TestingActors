@@ -9,10 +9,10 @@ import UIKit
 
 class ResultsViewController: UIViewController {
     
-    private let networkService: NetworkServiceProtocol
+    private let pokemonService: PokemonServiceProtocol
     
-    init(networkService: NetworkServiceProtocol) {
-        self.networkService = networkService
+    init(pokemonService: PokemonServiceProtocol) {
+        self.pokemonService = pokemonService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -25,12 +25,11 @@ class ResultsViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         Task {
-            let results = try await networkService.fetchResults()
-            await networkService.obtainImagesForPokemon(results: results)
+            await pokemonService.fetchResults()
         }
         
         Task {
-            await networkService.fetchResults()
+            await pokemonService.fetchResults()
         }
     }
 }
