@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		763944AC2C6C488900F7EDAB /* Abilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763944AB2C6C488900F7EDAB /* Abilities.swift */; };
+		763944AE2C6CFCF500F7EDAB /* AnyTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763944AD2C6CFCF500F7EDAB /* AnyTask.swift */; };
 		7681D8DC2C6B3401002D05C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7681D8DB2C6B3401002D05C0 /* AppDelegate.swift */; };
 		7681D8DE2C6B3401002D05C0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7681D8DD2C6B3401002D05C0 /* SceneDelegate.swift */; };
 		7681D8E02C6B3401002D05C0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7681D8DF2C6B3401002D05C0 /* ViewController.swift */; };
@@ -40,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		763944AB2C6C488900F7EDAB /* Abilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Abilities.swift; sourceTree = "<group>"; };
+		763944AD2C6CFCF500F7EDAB /* AnyTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTask.swift; sourceTree = "<group>"; };
 		7681D8D82C6B3401002D05C0 /* TestingActors.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestingActors.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7681D8DB2C6B3401002D05C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7681D8DD2C6B3401002D05C0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				7681D90C2C6B341B002D05C0 /* NetworkingService.swift */,
+				763944AD2C6CFCF500F7EDAB /* AnyTask.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				7681D8DC2C6B3401002D05C0 /* AppDelegate.swift in Sources */,
 				763944AC2C6C488900F7EDAB /* Abilities.swift in Sources */,
 				7681D8DE2C6B3401002D05C0 /* SceneDelegate.swift in Sources */,
+				763944AE2C6CFCF500F7EDAB /* AnyTask.swift in Sources */,
 				7681D90D2C6B341B002D05C0 /* NetworkingService.swift in Sources */,
 				7681D9102C6B3493002D05C0 /* Results.swift in Sources */,
 			);

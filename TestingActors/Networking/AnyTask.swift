@@ -15,8 +15,8 @@ class AnyTask {
     private var _value: () async throws -> Any?
     
     // Initializes with a generic 'Task' and stores its result in the '_value' closure.
-    init<T>(task: Task<T, Never>) {
-        self._value = { await task.value }
+    init<T>(task: Task<T, Error>) {
+        self._value = { try await task.value }
     }
     
     // Retrieves the task's value, casting it to the expected type 'T'.
