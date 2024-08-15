@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol NetworkServiceProtocol: AnyObject {
-    func executeRequest<T>(url: URL) async -> T? where T: Decodable
+    func executeRequestWithRetry<T>(url: URL, type: T.Type) async -> T? where T: Decodable
 }
 
 protocol PokemonServiceProtocol: AnyObject {
@@ -21,7 +21,48 @@ actor NetworkServiceImplementation: NetworkServiceProtocol {
     
     private var ongoingRequests: [URL: AnyTask] = [:]
     
-    internal func executeRequest<T>(url: URL) async -> T? where T: Decodable {
+    private var retryAmount: Int {
+        3
+    }
+    
+    private var currentRetryAmount: Int = 0
+    private var isRetrying: Bool = true
+    
+    private func createTask<T>(url: URL, type: T.Type) async -> Task<T, Error> where T: Decodable {
+        let task = Task {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decodedResults = try JSONDecoder().decode(T.self, from: data)
+            return decodedResults
+        }
+        
+        return task
+    }
+    
+    private func executeRequest<T>(url: URL, type: T.Type) async -> T? where T: Decodable {
+        while isRetrying && currentRetryAmount <= retryAmount {
+            
+            let task = await createTask(url: url, type: type)
+            ongoingRequests[url] = AnyTask(task: task)
+
+            do {
+                let results = try await task.value
+                currentRetryAmount = 0
+                isRetrying = false
+                return results
+            }
+            catch {
+                print("Error decoding request")
+                print("Retrying request for the \(currentRetryAmount) time")
+                print("")
+                currentRetryAmount += 1
+                isRetrying = true
+            }
+        }
+        
+        return nil
+    }
+    
+    internal func executeRequestWithRetry<T>(url: URL, type: T.Type) async -> T? where T: Decodable {
         
         if let ongoingRequest = ongoingRequests[url] {
             do {
@@ -33,25 +74,9 @@ actor NetworkServiceImplementation: NetworkServiceProtocol {
             }
         }
         
-        let task = Task {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let decodedResults = try JSONDecoder().decode(T.self, from: data)
-            return decodedResults
-        }
-        
-        ongoingRequests[url] = AnyTask(task: task)
-        
         defer { ongoingRequests.removeValue(forKey: url) }
         
-        do {
-            let results = try await task.value
-            print(results)
-            return results
-        }
-        catch {
-            print("Error decoding information")
-            return nil
-        }
+        return await executeRequest(url: url, type: type)
     }
 }
 
@@ -64,9 +89,9 @@ class PokemonServiceImplementation: PokemonServiceProtocol {
     }
     
     func fetchResults() async -> Results? {
-        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon") else { return nil }
+        guard let url = URL(string: "https://pokeapi.co/api/v2/pokmon") else { return nil }
         
-        return await networkServiceProtocol.executeRequest(url: url)
+        return await networkServiceProtocol.executeRequestWithRetry(url: url, type: Results.self)
     }
     
     func obtainImagesForPokemon(results: Results?) async -> [Abilities] {
@@ -86,7 +111,7 @@ class PokemonServiceImplementation: PokemonServiceProtocol {
                 }
                 
                 taskGroup.addTask {
-                    return await self.networkServiceProtocol.executeRequest(url: url)
+                    return await self.networkServiceProtocol.executeRequestWithRetry(url: url, type: Abilities.self)
                 }
             }
             
